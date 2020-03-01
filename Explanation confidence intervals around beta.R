@@ -8,9 +8,18 @@ library(shiny)
 ui <- fluidPage(
   titlePanel("95%-confidence intervals around different samples"),
   plotOutput("sample_plot", height = 600),
-        sliderInput(inputId = "n_samples", label = "Number of samples", min = 1  ,max=100, value = 10, step = 1)
-    
-)
+        sliderInput(inputId = "n_samples", label = "Number of samples", min = 1  ,max=100, value = 10, step = 1),
+        sliderInput(inputId = "sample_size", label = "sample size", min = 50  ,max=1000, value = 200, step = 50),
+
+  selectInput("CI_level", "Confidence level",
+               choices=c(0.99999,
+                          0.99,
+                           0.95,
+                            0.90,
+                             0.80))
+  
+  
+  )
 
 server <- function(input, output, session){
 
@@ -27,7 +36,7 @@ summary(lm(scaled_y~scaled_x, data = population))
 
 samples <- reactive({ out <- vector("list", input$n_samples)
               set.seed(1234)
-              for(i in 1:length(out)){out[[i]] <- dplyr::sample_n(population, size=200, replace=FALSE)}
+              for(i in 1:length(out)){out[[i]] <- dplyr::sample_n(population, size=input$sample_size, replace=FALSE)}  ##using dplyr to take 100 samples with 200 cases each from the population
                   out })
 
 #test<-observe(samples())
@@ -36,12 +45,12 @@ samples <- reactive({ out <- vector("list", input$n_samples)
 #for(i in 1:100){samples[[i]]<-dplyr::sample_n(population, size=200, replace=FALSE)}     #using dplyr to take 100 samples with 200 cases each from the population 
 #})                                                                     
 
-output$sample_plot<-renderPlot({
-
+output$sample_plot<-renderPlot({          #important to stat rendering the plot here, because the following line
+                                          #uses the samples() function, defined above, which only can work inside a reactive context (i.e. renderPlot)
 hundred_regressions<-samples()%>%lapply(lm, formula=scaled_y~scaled_x)
 hundred_regression_summaries<-lapply(hundred_regressions, summary)
 hundred_coefficients<-lapply(hundred_regressions, function(x) coef(x)[2])%>%unlist()
-hundred_CIs<-lapply(hundred_regressions, confint.lm, parm="scaled_x", level=0.95)
+hundred_CIs<-lapply(hundred_regressions, confint.lm, parm="scaled_x", level=as.numeric(input$CI_level))      
 
 
 CI_vector<-unlist(hundred_CIs) #for sure the following can be done more efficiently
