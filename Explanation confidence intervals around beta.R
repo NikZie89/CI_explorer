@@ -7,16 +7,9 @@ library(shiny)
 
 ui <- fluidPage(
   titlePanel("95%-confidence intervals around different samples"),
-  sidebarLayout(
-    sidebarPanel(
+  plotOutput("sample_plot", height = 600),
         sliderInput(inputId = "n_samples", label = "Number of samples", min = 1  ,max=100, value = 10, step = 1)
-                ),
     
-    mainPanel(
-  plotOutput("sample_plot")
-             )
-                )
-  
 )
 
 server <- function(input, output, session){
@@ -72,14 +65,15 @@ ggplot(CIs, aes(y=as.factor(sample)))+geom_segment(aes(x=lower_boundary, xend=up
   geom_point(aes(beta_coef, col=as.character(includes_true_beta)))+
   xlab("Estimated beta")+ ylab("Number of samples")+
   labs(title="Confidence intervals around estimated betas of the samples", 
-       caption="The vertical red line indicates the true beta of the population",
+       caption="The vertical red line indicates the true population beta (0.895)",
        color = "Population beta included in CI?")+
   scale_colour_manual(values=cols)+
   #ylim(NA, 100)+
-  xlim(0.6, 1.2)+
+  scale_x_continuous(breaks=seq(0, 2, 0.05), limits = c(0.6, 1.2))+
+  #xlim(0.6, 1.2)+
   #scale_y_continuous(breaks = seq(0, max(CIs$sample), 10))+
   scale_y_discrete(breaks=function(n) n[floor(length(n)/5)*1:5])+
-  theme_classic()
+  theme_classic(base_size=20)
                         })
 
 }
