@@ -32,7 +32,7 @@ ui <- fluidPage(
   )
 
 
-choiceVec <- c("99.999%"=0.99999,
+choiceVec <- c("99.999%"=0.99999,   #defining the choiceVec here, besically so I can later in the server refer to the labels of the radio button, rather than their actual values.
                "99%"=0.99,
                "95%"=0.95,
                "90%"=0.90,
