@@ -32,7 +32,7 @@ ui <- fluidPage(
   )
 
 
-choiceVec <- c("99.999%"=0.99999,   #defining the choiceVec here, besically so I can later in the server refer to the labels of the radio button, rather than their actual values.
+choiceVec <- c("99.999%"=0.99999,   #defining the choiceVec here, basically so I can later in the server refer to the labels of the radio button, rather than their actual values.
                "99%"=0.99,
                "95%"=0.95,
                "90%"=0.90,
@@ -101,7 +101,7 @@ ggplot(CIs, aes(y=as.factor(sample)))+geom_segment(aes(x=lower_boundary, xend=up
   scale_x_continuous(breaks=seq(0, 2, 0.05))+
   #xlim(0.6, 1.2)+      #I'm using coord_cartesian instead, because xlab will cause missing data if CIs range outside of the axis-limits
   coord_cartesian(xlim=c(0, 0.9))+
-  scale_y_discrete(breaks=function(n) n[floor(length(n)/5)*1:5])+
+  scale_y_discrete(breaks=function(n) n[floor(length(n)/5)*1:5])+     #some fancy way of only getting integer values at the y-axis.
   theme_classic(base_size=16)
                         })
 
