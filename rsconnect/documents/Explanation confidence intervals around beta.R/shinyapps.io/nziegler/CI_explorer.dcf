@@ -1,0 +1,12 @@
+name: CI_explorer
+title: CI_explorer
+username:
+account: nziegler
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1884869
+bundleId: 2843252
+url: https://nziegler.shinyapps.io/CI_explorer/
+when: 1583142543.96059
+asMultiple: FALSE
+asStatic: FALSE
