@@ -48,7 +48,7 @@ y_var<-x_var/10+rnorm(100000, mean=0, sd=0.2)    #basically just adding a bit of
 population<-cbind.data.frame(x_var, y_var)%>%
             mutate(scaled_x=scale(x_var), scaled_y=scale(y_var))
 
-true_cor<-cor(x_var, y_var) #high correlation of 0.895, as we only have one predictor, this is the same as the standardized beta coefficient
+true_cor<-cor(x_var, y_var) #correlation of 0.45. As we only have one predictor, this is the same as the standardized beta coefficient
 #summary(lm(scaled_y~scaled_x, data = population))
 
 
